@@ -14,6 +14,7 @@ from socket_listener import SocketListener
 from state_manager import *
 from ribbon import *
 from outline_renderer import OutlineRenderer
+import states
 import ui
 from ui import get_ui, QUIBarWidget, QRSVWindow
 from config import Config, ConfigVal
@@ -109,7 +110,7 @@ class QRSVGLWidget(QtOpenGL.QGLWidget):
         self.pr_m_model = self.prog['m_model']
         self.pr_global_color = self.prog['globalColor']
         self.pr_camera_pos = self.prog['cameraPos']
-
+        
         self.pra_m_vp = self.prog_arena['m_vp']
         self.pra_m_model = self.prog_arena['m_model']
         self.pra_ball_pos = self.prog_arena['ballPos']
@@ -231,7 +232,7 @@ class QRSVGLWidget(QtOpenGL.QGLWidget):
         ribbon_away_dir = safe_normalize(first_point.vel)
         ribbon_sideways_dir = ribbon_away_dir.cross(cam_to_ribbon_dir)
 
-        for point in ribbon.points: # type: RibbonPoint
+        for point in ribbon.points: # type: #RibbonPoint
             if not point.connected:
                 continue
 
@@ -387,7 +388,6 @@ class QRSVGLWidget(QtOpenGL.QGLWidget):
 
         if not (self.outline_renderer is None):
             self.outline_renderer.clear()
-
         self.ctx.clear(0, 0, 0)
         self.ctx.enable(moderngl.DEPTH_TEST)
         self.ctx.enable(moderngl.BLEND)
@@ -555,6 +555,8 @@ class QRSVGLWidget(QtOpenGL.QGLWidget):
         if state.recv_interval > 0:
             ui_text += "Network rate: {:.2f}fps".format(1 / state.recv_interval) + "\n"
         ui_text += "Ball speed: {:.2f}kph".format(state.ball_state.prev_vel.length * (9 / 250)) + "\n"
+        v:states.CarState = state.car_states[self.spectate_idx]
+        ui_text += "Boost Amount: {:.2f}".format(v.boost_amount) + "\n"
         get_ui().set_text(ui_text)
 
         ###########################################

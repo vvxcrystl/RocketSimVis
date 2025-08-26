@@ -156,7 +156,6 @@ class QUIBarWidget(QWidget):
 
         self.text_label = QtWidgets.QLabel("...")
         vbox.addWidget(self.text_label)
-
         self.edit_config_button = QtWidgets.QPushButton("Edit Settings")
         self.edit_config_button.clicked.connect(self.on_edit_config)
         vbox.addWidget(self.edit_config_button)
@@ -177,6 +176,9 @@ class QUIBarWidget(QWidget):
 
     def set_text(self, text: str):
         self.text_label.setText(text)
+    
+    def set_boost(self, boost_count: int):
+        self.boost_counter.setText(f"Boost Count: {str(boost_count)}")
 
 def get_ui() -> QUIBarWidget:
     return _g_ui_widget
@@ -185,7 +187,7 @@ class QRSVWindow(QtWidgets.QMainWindow):
     def __init__(self, gl_widget):
         super().__init__()
 
-        self.setWindowTitle("RocketSimVis")
+        self.setWindowTitle("RocketSimVis (modded by crystl :3)")
 
         path = Path(__file__).parent.resolve() / "qt_style_sheet.css"
         self.setStyleSheet(path.read_text())
